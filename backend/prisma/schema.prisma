@@ -7,10 +7,24 @@ datasource db {
   provider = "postgresql"
 }
 
+
 model User {
   id String @id @default(uuid())
   username String @unique
   email String @unique
   password String
   createdAt DateTime @default(now())
+
+  wallet Wallet?
+}
+
+model Wallet {
+  id String @id @default(uuid())
+  balance Decimal @default(20000)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String @unique
+  user User @relation(fields: [userId], references: [id])
 }

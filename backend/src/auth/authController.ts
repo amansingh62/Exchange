@@ -45,7 +45,13 @@ export const signup = async (req: Request, res: Response) => {
         username,
         email,
         password: hashedPassword,
+        wallet: {
+          create: {}
+        }
       },
+      include: {
+        wallet: true
+      }
     });
 
     const accessToken = generateAccessToken(user.id);
@@ -60,6 +66,10 @@ export const signup = async (req: Request, res: Response) => {
         id: user.id,
         username: user.username,
         email: user.email,
+         wallet: {
+         id: user.wallet?.id,
+         balance: user.wallet?.balance,
+    },
       },
     });
   } catch (error) {
