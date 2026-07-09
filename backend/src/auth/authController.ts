@@ -224,3 +224,34 @@ export const logout = async (req: Request, res: Response) => {
     message: "Logged out successfully",
   });
 };
+
+export const getWallet = async (req: Request, res: Response) => {
+  try {
+    const userId = req.userId;
+
+    const wallet = await prisma.wallet.findUnique({
+      where: {
+        userId,
+      },
+      select: {
+        id: true,
+        balance: true,
+      },
+    });
+
+    if (!wallet) {
+      return res.status(404).json({
+        message: "Wallet not found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Wallet fetched successfully",
+      wallet,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
